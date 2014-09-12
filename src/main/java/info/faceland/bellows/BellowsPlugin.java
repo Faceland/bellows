@@ -6,11 +6,14 @@ import info.faceland.facecore.shade.nun.ivory.config.VersionedIvoryYamlConfigura
 import info.faceland.facecore.shade.nun.ivory.config.settings.IvorySettings;
 import info.faceland.hilt.HiltItemStack;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,15 +67,19 @@ public class BellowsPlugin extends FacePlugin {
     class BellowsListener implements Listener {
 
         @EventHandler(priority = EventPriority.LOWEST)
-        public void onCraftItem(CraftItemEvent event) {
-            String name = ivorySettings.getString("config." + event.getCurrentItem().getType().name() + ".name", "");
+        public void onCraftItem(PrepareItemCraftEvent event) {
+            ItemStack is = event.getInventory().getResult();
+            if (is == null || is.getType() == Material.AIR) {
+                return;
+            }
+            String name = ivorySettings.getString("config.normal-items." + is.getType().name() + ".name", "");
             List<String> lore = ivorySettings.getStringList(
-                    "config." + event.getCurrentItem().getType().name() + ".lore", new ArrayList<String>());
-            HiltItemStack hiltItemStack = new HiltItemStack(event.getCurrentItem());
-            if (hiltItemStack.getName().equals("")) {
-                hiltItemStack.setName(name);
-                hiltItemStack.setLore(lore);
-                event.setCurrentItem(hiltItemStack);
+                    "config.normal-items." + is.getType().name() + ".lore", new ArrayList<String>());
+            HiltItemStack hiltItemStack = new HiltItemStack(is);
+            if (ChatColor.stripColor(hiltItemStack.getName()).equals("")) {
+                hiltItemStack.setName(TextUtils.color(name));
+                hiltItemStack.setLore(TextUtils.color(lore));
+                event.getInventory().setResult(hiltItemStack);
             }
         }
 
