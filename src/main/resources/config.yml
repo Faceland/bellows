@@ -1,0 +1,18 @@
+version: "0.0.1"
+normal-items:
+  DIAMOND_SWORD:
+    name: "&6Holy Shit, A Diamond Sword"
+    lore:
+    - "&6Fuck yeah, lore!"
+recipes:
+  DIAMOND_SWORD:
+    name: "&6Holy Fuck, A Diamond Sword"
+    lore:
+    - "&6Fuck yeah, more lore!"
+    recipe:
+    - ' x '
+    - ' x '
+    - ' y '
+    ingredients:
+      x: DIAMOND
+      y: DIAMOND_SWORD
