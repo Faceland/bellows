@@ -5,6 +5,7 @@ import info.faceland.facecore.shade.nun.ivory.config.VersionedIvoryConfiguration
 import info.faceland.facecore.shade.nun.ivory.config.VersionedIvoryYamlConfiguration;
 import info.faceland.facecore.shade.nun.ivory.config.settings.IvorySettings;
 import info.faceland.hilt.HiltItemStack;
+import info.faceland.utils.TextUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
