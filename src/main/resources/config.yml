@@ -1,4 +1,4 @@
-version: "0.0.1"
+version: "0.0.2"
 normal-items:
   DIAMOND_SWORD:
     name: "<gold>Holy Shit, A Diamond Sword"
@@ -9,10 +9,17 @@ recipes:
     name: "<gold>Holy Fuck, A Diamond Sword"
     lore:
     - "<gold>Fuck yeah, more lore!"
-    recipe:
+    shaped-recipe:
     - ' x '
     - ' x '
     - ' y '
     ingredients:
       x: DIAMOND
       y: DIAMOND_SWORD
+  DIAMOND_SWORD:
+    name: "<gold>Holy Fuck, A Diamond Sword"
+    lore:
+    - "<gold>Fuck yeah, even more lore!"
+    shapeless-recipe:
+      DIAMOND: 2
+      DIAMOND_SWORD: 1
