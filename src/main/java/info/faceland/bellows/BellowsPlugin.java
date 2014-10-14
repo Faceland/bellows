@@ -1,11 +1,13 @@
 package info.faceland.bellows;
 
+import com.google.common.base.Joiner;
 import info.faceland.api.FacePlugin;
 import info.faceland.facecore.shade.nun.ivory.config.VersionedIvoryConfiguration;
 import info.faceland.facecore.shade.nun.ivory.config.VersionedIvoryYamlConfiguration;
 import info.faceland.facecore.shade.nun.ivory.config.settings.IvorySettings;
 import info.faceland.hilt.HiltItemStack;
 import info.faceland.utils.TextUtils;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -130,7 +132,8 @@ public class BellowsPlugin extends FacePlugin {
             List<String> lore = ivorySettings.getStringList(
                     "config.normal-items." + is.getType().name() + ".lore", new ArrayList<String>());
             HiltItemStack hiltItemStack = new HiltItemStack(is);
-            if (ChatColor.stripColor(hiltItemStack.getName()).equals("")) {
+            if (ChatColor.stripColor(hiltItemStack.getName()).equals(WordUtils.capitalizeFully(
+                    Joiner.on(" ").skipNulls().join(is.getType().name().split("_"))))) {
                 hiltItemStack.setName(TextUtils.color(name));
                 hiltItemStack.setLore(TextUtils.color(lore));
                 event.getInventory().setResult(hiltItemStack);
