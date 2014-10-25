@@ -14,7 +14,7 @@
     <repositories>
         <repository>
             <id>convent-repo</id>
-            <url>http://repository-topplethenun.forge.cloudbees.com/snapshot/</url>
+            <url>http://repo-topplethenun.rhcloud.com/nexus/content/groups/public/</url>
             <snapshots>
                 <updatePolicy>always</updatePolicy>
             </snapshots>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>info.faceland</groupId>
             <artifactId>facecore</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
