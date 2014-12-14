@@ -2,9 +2,9 @@ package info.faceland.bellows;
 
 import com.google.common.base.Joiner;
 import info.faceland.api.FacePlugin;
-import info.faceland.facecore.shade.nun.ivory.config.VersionedIvoryConfiguration;
-import info.faceland.facecore.shade.nun.ivory.config.VersionedIvoryYamlConfiguration;
-import info.faceland.facecore.shade.nun.ivory.config.settings.IvorySettings;
+import info.faceland.config.VersionedFaceConfiguration;
+import info.faceland.config.VersionedFaceYamlConfiguration;
+import info.faceland.config.settings.FaceSettings;
 import info.faceland.hilt.HiltItemStack;
 import info.faceland.utils.TextUtils;
 import org.apache.commons.lang.WordUtils;
@@ -29,18 +29,18 @@ import java.util.Map;
 
 public class BellowsPlugin extends FacePlugin {
 
-    private VersionedIvoryYamlConfiguration configYAML;
-    private IvorySettings ivorySettings;
+    private VersionedFaceYamlConfiguration configYAML;
+    private FaceSettings faceSettings;
 
     @Override
     public void preEnable() {
         configYAML =
-                new VersionedIvoryYamlConfiguration(new File(getDataFolder(), "config.yml"), getResource("config.yml"),
-                                                    VersionedIvoryConfiguration.VersionUpdateType.BACKUP_AND_UPDATE);
+                new VersionedFaceYamlConfiguration(new File(getDataFolder(), "config.yml"), getResource("config.yml"),
+                                                    VersionedFaceConfiguration.VersionUpdateType.BACKUP_AND_UPDATE);
         if (configYAML.update()) {
             getLogger().info("Updating config.yml");
         }
-        ivorySettings = IvorySettings.loadFromFiles(configYAML);
+        faceSettings = FaceSettings.loadFromFiles(configYAML);
     }
 
     @Override
@@ -116,10 +116,6 @@ public class BellowsPlugin extends FacePlugin {
 
     }
 
-    public VersionedIvoryYamlConfiguration getConfigYAML() {
-        return configYAML;
-    }
-
     class BellowsListener implements Listener {
 
         @EventHandler(priority = EventPriority.LOWEST)
@@ -128,8 +124,8 @@ public class BellowsPlugin extends FacePlugin {
             if (is == null || is.getType() == Material.AIR) {
                 return;
             }
-            String name = ivorySettings.getString("config.normal-items." + is.getType().name() + ".name", "");
-            List<String> lore = ivorySettings.getStringList(
+            String name = faceSettings.getString("config.normal-items." + is.getType().name() + ".name", "");
+            List<String> lore = faceSettings.getStringList(
                     "config.normal-items." + is.getType().name() + ".lore", new ArrayList<String>());
             HiltItemStack hiltItemStack = new HiltItemStack(is);
             if (ChatColor.stripColor(hiltItemStack.getName()).equals(WordUtils.capitalizeFully(
