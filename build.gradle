@@ -35,7 +35,7 @@ dependencies {
 
 processResources {
     filter ReplaceTokens, tokens: [
-            VERSION: version + "-" + (System.getenv("DRONE") != null ? "drone" : "compiled") + "-" + (System.getenv("BUILD_ID") ?: "0"),
+            VERSION: version + "-" + (System.getenv("CIRCLECI") != null ? "circleci" : "compiled") + "-" + (System.getenv("CIRCLE_BUILD_NUM") ?: "0"),
             NAME   : project.name
     ]
 }
