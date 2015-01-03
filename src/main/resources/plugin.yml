@@ -1,4 +1,4 @@
-name: ${project.build.name}
-version: ${project.build.version}
+name: @NAME@
+version: @VERSION@
 main: info.faceland.bellows.BellowsPlugin
-depend: [Facecore]
+depend: [facecore]

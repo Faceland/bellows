@@ -1,13 +1,5 @@
 package info.faceland.bellows;
 
-import com.google.common.base.Joiner;
-import info.faceland.api.FacePlugin;
-import info.faceland.config.VersionedFaceConfiguration;
-import info.faceland.config.VersionedFaceYamlConfiguration;
-import info.faceland.config.settings.FaceSettings;
-import info.faceland.hilt.HiltItemStack;
-import info.faceland.utils.TextUtils;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,6 +12,13 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.nunnerycode.facecore.configuration.MasterConfiguration;
+import org.nunnerycode.facecore.configuration.VersionedSmartYamlConfiguration;
+import org.nunnerycode.facecore.hilt.HiltItemStack;
+import org.nunnerycode.facecore.plugin.FacePlugin;
+import org.nunnerycode.facecore.utilities.TextUtils;
+import org.nunnerycode.kern.apache.commons.lang3.text.WordUtils;
+import org.nunnerycode.kern.shade.google.common.base.Joiner;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,22 +28,17 @@ import java.util.Map;
 
 public class BellowsPlugin extends FacePlugin {
 
-    private VersionedFaceYamlConfiguration configYAML;
-    private FaceSettings faceSettings;
-
-    @Override
-    public void preEnable() {
-        configYAML =
-                new VersionedFaceYamlConfiguration(new File(getDataFolder(), "config.yml"), getResource("config.yml"),
-                                                    VersionedFaceConfiguration.VersionUpdateType.BACKUP_AND_UPDATE);
-        if (configYAML.update()) {
-            getLogger().info("Updating config.yml");
-        }
-        faceSettings = FaceSettings.loadFromFiles(configYAML);
-    }
+    private MasterConfiguration faceSettings;
 
     @Override
     public void enable() {
+        VersionedSmartYamlConfiguration configYAML =
+                new VersionedSmartYamlConfiguration(new File(getDataFolder(), "config.yml"), getResource("config.yml"));
+        if (configYAML.update()) {
+            getLogger().info("Updating config.yml");
+        }
+        faceSettings = new MasterConfiguration();
+        faceSettings.load(configYAML);
         Bukkit.getPluginManager().registerEvents(new BellowsListener(), this);
         for (String key : configYAML.getConfigurationSection("recipes").getKeys(false)) {
             ConfigurationSection recipes = configYAML.getConfigurationSection("recipes");
@@ -56,7 +50,7 @@ public class BellowsPlugin extends FacePlugin {
                 continue;
             }
             String name = TextUtils.color(recipes.getString(key + ".name", ""));
-            List<String> lore = TextUtils.color(recipes.getStringList(key + ".lore"));
+            List<String> lore = color(recipes.getStringList(key + ".lore"));
             HiltItemStack hiltItemStack = new HiltItemStack(material);
             hiltItemStack.setName(name);
             hiltItemStack.setLore(lore);
@@ -97,23 +91,16 @@ public class BellowsPlugin extends FacePlugin {
     }
 
     @Override
-    public void postEnable() {
-
-    }
-
-    @Override
-    public void preDisable() {
-
-    }
-
-    @Override
     public void disable() {
         HandlerList.unregisterAll(this);
     }
 
-    @Override
-    public void postDisable() {
-
+    private List<String> color(List<String> list) {
+        List<String> ret = new ArrayList<>();
+        for (String s : list) {
+            ret.add(TextUtils.color(s));
+        }
+        return ret;
     }
 
     class BellowsListener implements Listener {
@@ -125,13 +112,12 @@ public class BellowsPlugin extends FacePlugin {
                 return;
             }
             String name = faceSettings.getString("config.normal-items." + is.getType().name() + ".name", "");
-            List<String> lore = faceSettings.getStringList(
-                    "config.normal-items." + is.getType().name() + ".lore", new ArrayList<String>());
+            List<String> lore = faceSettings.getStringList("config.normal-items." + is.getType().name() + ".lore");
             HiltItemStack hiltItemStack = new HiltItemStack(is);
             if (ChatColor.stripColor(hiltItemStack.getName()).equals(WordUtils.capitalizeFully(
                     Joiner.on(" ").skipNulls().join(is.getType().name().split("_"))))) {
                 hiltItemStack.setName(TextUtils.color(name));
-                hiltItemStack.setLore(TextUtils.color(lore));
+                hiltItemStack.setLore(color(lore));
                 event.getInventory().setResult(hiltItemStack);
             }
         }
