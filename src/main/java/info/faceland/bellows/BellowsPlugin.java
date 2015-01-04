@@ -54,52 +54,54 @@ public class BellowsPlugin extends FacePlugin {
         faceSettings = new MasterConfiguration();
         faceSettings.load(configYAML);
         Bukkit.getPluginManager().registerEvents(new BellowsListener(), this);
-        for (String key : configYAML.getConfigurationSection("recipes").getKeys(false)) {
-            ConfigurationSection recipes = configYAML.getConfigurationSection("recipes");
-            if (!recipes.isConfigurationSection(key)) {
-                continue;
-            }
-            Material material = Material.getMaterial(key);
-            if (material == null || material == Material.AIR) {
-                continue;
-            }
-            String name = TextUtils.color(recipes.getString(key + ".name", ""));
-            List<String> lore = color(recipes.getStringList(key + ".lore"));
-            HiltItemStack hiltItemStack = new HiltItemStack(material);
-            hiltItemStack.setName(name);
-            hiltItemStack.setLore(lore);
-            if (recipes.isSet(key + ".shaped-recipe")) {
-                List<String> recipeList = recipes.getStringList(key + ".shaped-recipe");
-                String[] recipeArray = recipeList.toArray(new String[recipeList.size()]);
-                Map<String, Material> materialMap = new HashMap<>();
-                ConfigurationSection cs = recipes.getConfigurationSection(key + ".ingredients");
-                for (String mKey : cs.getKeys(false)) {
-                    Material m = Material.getMaterial(cs.getString(mKey));
-                    if (m == null || m == Material.AIR) {
-                        continue;
-                    }
-                    materialMap.put(mKey, m);
-                }
-                ShapedRecipe recipe = new ShapedRecipe(hiltItemStack);
-                recipe.shape(recipeArray);
-                for (Map.Entry<String, Material> e : materialMap.entrySet()) {
-                    recipe.setIngredient(e.getKey().charAt(0), e.getValue());
-                }
-                Bukkit.addRecipe(recipe);
-            } else {
-                ConfigurationSection shapeless = recipes.getConfigurationSection(key + ".shapeless-recipe");
-                if (shapeless == null) {
+        if (configYAML.isConfigurationSection("recipes")) {
+            for (String key : configYAML.getConfigurationSection("recipes").getKeys(false)) {
+                ConfigurationSection recipes = configYAML.getConfigurationSection("recipes");
+                if (!recipes.isConfigurationSection(key)) {
                     continue;
                 }
-                ShapelessRecipe recipe = new ShapelessRecipe(hiltItemStack);
-                for (String ing : shapeless.getKeys(false)) {
-                    Material m = Material.getMaterial(ing);
-                    if (m == null || m == Material.AIR) {
+                Material material = Material.getMaterial(key);
+                if (material == null || material == Material.AIR) {
+                    continue;
+                }
+                String name = TextUtils.color(recipes.getString(key + ".name", ""));
+                List<String> lore = color(recipes.getStringList(key + ".lore"));
+                HiltItemStack hiltItemStack = new HiltItemStack(material);
+                hiltItemStack.setName(name);
+                hiltItemStack.setLore(lore);
+                if (recipes.isSet(key + ".shaped-recipe")) {
+                    List<String> recipeList = recipes.getStringList(key + ".shaped-recipe");
+                    String[] recipeArray = recipeList.toArray(new String[recipeList.size()]);
+                    Map<String, Material> materialMap = new HashMap<>();
+                    ConfigurationSection cs = recipes.getConfigurationSection(key + ".ingredients");
+                    for (String mKey : cs.getKeys(false)) {
+                        Material m = Material.getMaterial(cs.getString(mKey));
+                        if (m == null || m == Material.AIR) {
+                            continue;
+                        }
+                        materialMap.put(mKey, m);
+                    }
+                    ShapedRecipe recipe = new ShapedRecipe(hiltItemStack);
+                    recipe.shape(recipeArray);
+                    for (Map.Entry<String, Material> e : materialMap.entrySet()) {
+                        recipe.setIngredient(e.getKey().charAt(0), e.getValue());
+                    }
+                    Bukkit.addRecipe(recipe);
+                } else {
+                    ConfigurationSection shapeless = recipes.getConfigurationSection(key + ".shapeless-recipe");
+                    if (shapeless == null) {
                         continue;
                     }
-                    recipe.addIngredient(shapeless.getInt(ing), m);
+                    ShapelessRecipe recipe = new ShapelessRecipe(hiltItemStack);
+                    for (String ing : shapeless.getKeys(false)) {
+                        Material m = Material.getMaterial(ing);
+                        if (m == null || m == Material.AIR) {
+                            continue;
+                        }
+                        recipe.addIngredient(shapeless.getInt(ing), m);
+                    }
+                    Bukkit.addRecipe(recipe);
                 }
-                Bukkit.addRecipe(recipe);
             }
         }
     }
