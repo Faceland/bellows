@@ -14,6 +14,14 @@
  */
 package info.faceland.bellows;
 
+import com.tealcube.minecraft.bukkit.facecore.plugin.FacePlugin;
+import com.tealcube.minecraft.bukkit.facecore.shade.config.MasterConfiguration;
+import com.tealcube.minecraft.bukkit.facecore.shade.config.VersionedSmartConfiguration;
+import com.tealcube.minecraft.bukkit.facecore.shade.config.VersionedSmartYamlConfiguration;
+import com.tealcube.minecraft.bukkit.facecore.shade.hilt.HiltItemStack;
+import com.tealcube.minecraft.bukkit.facecore.utilities.TextUtils;
+import com.tealcube.minecraft.bukkit.kern.apache.commons.lang3.text.WordUtils;
+import com.tealcube.minecraft.bukkit.kern.shade.google.common.base.Joiner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -26,14 +34,6 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
-import org.nunnerycode.facecore.configuration.MasterConfiguration;
-import org.nunnerycode.facecore.configuration.VersionedSmartConfiguration.VersionUpdateType;
-import org.nunnerycode.facecore.configuration.VersionedSmartYamlConfiguration;
-import org.nunnerycode.facecore.hilt.HiltItemStack;
-import org.nunnerycode.facecore.plugin.FacePlugin;
-import org.nunnerycode.facecore.utilities.TextUtils;
-import org.nunnerycode.kern.apache.commons.lang3.text.WordUtils;
-import org.nunnerycode.kern.shade.google.common.base.Joiner;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class BellowsPlugin extends FacePlugin {
     @Override
     public void enable() {
         VersionedSmartYamlConfiguration configYAML = new VersionedSmartYamlConfiguration(new File(getDataFolder(),
-                "config.yml"), getResource("config.yml"), VersionUpdateType.BACKUP_AND_UPDATE);
+                "config.yml"), getResource("config.yml"), VersionedSmartConfiguration.VersionUpdateType.BACKUP_AND_UPDATE);
         if (configYAML.update()) {
             getLogger().info("Updating config.yml");
         }
