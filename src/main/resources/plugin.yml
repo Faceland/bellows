@@ -1,4 +1,4 @@
 name: @NAME@
 version: @VERSION@
 main: info.faceland.bellows.BellowsPlugin
-depend: [facecore]
+depend: [Facecore]
