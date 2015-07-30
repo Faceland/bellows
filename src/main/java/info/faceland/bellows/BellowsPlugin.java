@@ -30,6 +30,8 @@ import com.tealcube.minecraft.bukkit.facecore.utilities.TextUtils;
 import com.tealcube.minecraft.bukkit.hilt.HiltItemStack;
 import com.tealcube.minecraft.bukkit.kern.apache.commons.lang3.text.WordUtils;
 import com.tealcube.minecraft.bukkit.kern.shade.google.common.base.Joiner;
+import com.tealcube.minecraft.bukkit.kern.shade.google.common.collect.Sets;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,6 +41,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -141,6 +144,7 @@ public class BellowsPlugin extends FacePlugin {
                     Joiner.on(" ").skipNulls().join(is.getType().name().split("_"))))) {
                 hiltItemStack.setName(TextUtils.color(name));
                 hiltItemStack.setLore(color(lore));
+                hiltItemStack.setItemFlags(Sets.newHashSet(ItemFlag.HIDE_ATTRIBUTES));
                 event.getInventory().setResult(hiltItemStack);
             }
         }
