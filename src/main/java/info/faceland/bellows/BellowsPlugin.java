@@ -144,7 +144,13 @@ public class BellowsPlugin extends FacePlugin {
                     Joiner.on(" ").skipNulls().join(is.getType().name().split("_"))))) {
                 hiltItemStack.setName(TextUtils.color(name));
                 hiltItemStack.setLore(color(lore));
-                hiltItemStack.setItemFlags(Sets.newHashSet(ItemFlag.HIDE_ATTRIBUTES));
+                if (is.getType() == Material.WOOD_AXE || is.getType() == Material.WOOD_SWORD ||
+                    is.getType() == Material.STONE_AXE || is.getType() == Material.STONE_SWORD ||
+                    is.getType() == Material.IRON_AXE || is.getType() == Material.IRON_SWORD ||
+                    is.getType() == Material.GOLD_AXE || is.getType() == Material.GOLD_SWORD ||
+                    is.getType() == Material.DIAMOND_AXE || is.getType() == Material.DIAMOND_SWORD) {
+                    hiltItemStack.setItemFlags(Sets.newHashSet(ItemFlag.HIDE_ATTRIBUTES));
+                }
                 event.getInventory().setResult(hiltItemStack);
             }
         }
