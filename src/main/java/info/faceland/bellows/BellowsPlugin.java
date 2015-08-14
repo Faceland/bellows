@@ -22,16 +22,16 @@
  */
 package info.faceland.bellows;
 
+import com.tealcube.minecraft.bukkit.TextUtils;
 import com.tealcube.minecraft.bukkit.config.MasterConfiguration;
 import com.tealcube.minecraft.bukkit.config.VersionedConfiguration;
 import com.tealcube.minecraft.bukkit.config.VersionedSmartYamlConfiguration;
 import com.tealcube.minecraft.bukkit.facecore.plugin.FacePlugin;
-import com.tealcube.minecraft.bukkit.facecore.utilities.TextUtils;
 import com.tealcube.minecraft.bukkit.hilt.HiltItemStack;
-import com.tealcube.minecraft.bukkit.kern.apache.commons.lang3.text.WordUtils;
-import com.tealcube.minecraft.bukkit.kern.shade.google.common.base.Joiner;
-import com.tealcube.minecraft.bukkit.kern.shade.google.common.collect.Sets;
 
+import com.tealcube.minecraft.bukkit.shade.apache.commons.lang3.text.WordUtils;
+import com.tealcube.minecraft.bukkit.shade.google.common.base.Joiner;
+import com.tealcube.minecraft.bukkit.shade.google.common.collect.Sets;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
