@@ -129,21 +129,32 @@ public class BellowsPlugin extends FacePlugin {
         return ret;
     }
 
-    class BellowsListener implements Listener {
-
+    private class BellowsListener implements Listener {
         @EventHandler(priority = EventPriority.LOWEST)
         public void onCraftItem(PrepareItemCraftEvent event) {
             ItemStack is = event.getInventory().getResult();
             if (is == null || is.getType() == Material.AIR) {
                 return;
             }
+            HiltItemStack shieldIngredient = null;
+            for (ItemStack itemStack : event.getInventory().getMatrix()) {
+                if (itemStack == null || is.getType() != Material.SHIELD) {
+                    continue;
+                }
+                shieldIngredient = new HiltItemStack(itemStack);
+            }
             String name = faceSettings.getString("config.normal-items." + is.getType().name() + ".name");
             List<String> lore = faceSettings.getStringList("config.normal-items." + is.getType().name() + ".lore");
             HiltItemStack hiltItemStack = new HiltItemStack(is);
             if (ChatColor.stripColor(hiltItemStack.getName()).equals(WordUtils.capitalizeFully(
                     Joiner.on(" ").skipNulls().join(is.getType().name().split("_"))))) {
-                hiltItemStack.setName(TextUtils.color(name));
-                hiltItemStack.setLore(color(lore));
+                if (shieldIngredient != null) {
+                    hiltItemStack.setName(shieldIngredient.getName());
+                    hiltItemStack.setLore(shieldIngredient.getLore());
+                } else {
+                    hiltItemStack.setName(TextUtils.color(name));
+                    hiltItemStack.setLore(color(lore));
+                }
                 if (is.getType() == Material.WOOD_AXE || is.getType() == Material.WOOD_SWORD ||
                     is.getType() == Material.STONE_AXE || is.getType() == Material.STONE_SWORD ||
                     is.getType() == Material.IRON_AXE || is.getType() == Material.IRON_SWORD ||
