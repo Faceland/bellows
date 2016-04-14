@@ -138,12 +138,17 @@ public class BellowsPlugin extends FacePlugin {
             }
             HiltItemStack shieldIngredient = null;
             for (ItemStack itemStack : event.getInventory().getMatrix()) {
-                if (itemStack == null || is.getType() != Material.SHIELD) {
+                if (itemStack == null || itemStack.getType() == Material.AIR) {
                     continue;
                 }
-                shieldIngredient = new HiltItemStack(itemStack);
+                if (itemStack.getType() == Material.SHIELD) {
+                    shieldIngredient = new HiltItemStack(itemStack);
+                }
             }
             String name = faceSettings.getString("config.normal-items." + is.getType().name() + ".name");
+            if (name.equals("")) {
+                return;
+            }
             List<String> lore = faceSettings.getStringList("config.normal-items." + is.getType().name() + ".lore");
             HiltItemStack hiltItemStack = new HiltItemStack(is);
             if (ChatColor.stripColor(hiltItemStack.getName()).equals(WordUtils.capitalizeFully(
@@ -151,15 +156,10 @@ public class BellowsPlugin extends FacePlugin {
                 if (shieldIngredient != null) {
                     hiltItemStack.setName(shieldIngredient.getName());
                     hiltItemStack.setLore(shieldIngredient.getLore());
+                    hiltItemStack.setItemFlags(Sets.newHashSet(ItemFlag.HIDE_ATTRIBUTES));
                 } else {
                     hiltItemStack.setName(TextUtils.color(name));
                     hiltItemStack.setLore(color(lore));
-                }
-                if (is.getType() == Material.WOOD_AXE || is.getType() == Material.WOOD_SWORD ||
-                    is.getType() == Material.STONE_AXE || is.getType() == Material.STONE_SWORD ||
-                    is.getType() == Material.IRON_AXE || is.getType() == Material.IRON_SWORD ||
-                    is.getType() == Material.GOLD_AXE || is.getType() == Material.GOLD_SWORD ||
-                    is.getType() == Material.DIAMOND_AXE || is.getType() == Material.DIAMOND_SWORD) {
                     hiltItemStack.setItemFlags(Sets.newHashSet(ItemFlag.HIDE_ATTRIBUTES));
                 }
                 event.getInventory().setResult(hiltItemStack);
